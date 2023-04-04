@@ -1,0 +1,24 @@
+/tundra/node_modules
+/tundra/.pnp
+/tundra/.pnp.js
+
+# testing
+/tundra/coverage
+
+# production
+/tundra/build
+
+# misc
+/tundra/.DS_Store
+/tundra/.env.local
+/tundra/.env.development.local
+/tundra/.env.test.local
+/tundra/.env.production.local
+
+/tundra/npm-debug.log*
+/tundra/yarn-debug.log*
+/tundra/yarn-error.log*
+/tundra/.env
+
+/tundra_server/node_modules
+/tundra_server/.env

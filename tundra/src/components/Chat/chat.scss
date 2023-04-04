@@ -1,0 +1,138 @@
+.chat{
+    position: absolute;
+    background-color: white;
+    z-index: 7;
+    width: 304px;
+    border-radius: 10px;
+    border: 2px solid #272727;
+    box-sizing: border-box;
+
+    .chatBody{
+        position: relative;
+        z-index: 7;
+
+        .chatConrolls{
+            display: flex;
+            align-items: center;
+            margin-left: 5px;
+            background-color: white;
+            border-radius: 10px 10px 0 0;
+
+            .chatsIcons{
+                height: 21px;
+                width: 21px;
+                margin-right: 10px;
+                fill: gray;
+
+                &:hover{
+                    fill: #272727;
+                }
+            }
+        }
+
+        .chatHeader{
+            display: flex;
+            //justify-content: center;
+            align-content: center;
+            margin: 2px 0;
+            .chatName{
+                margin: 0;
+                margin-left: 35px;
+                color: #272727;
+                font-size: 19px;
+                font-weight: 500;
+            }
+        }
+    
+        .chatMessages{
+            width: 100%;
+            height: 400px;
+            overflow-y: scroll;
+            padding: 0 5px 5px 5px;
+    
+            .message{
+                width: fit-content;
+                margin-top: 10px;
+                
+                .messageSender{
+                    display: flex;
+                    align-items: center;
+                    user-select: none;
+                    .senderImg{
+                        width: 25px;
+                        height: 25px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: #FF652F;
+                        border-radius: 50%;
+    
+                        p{
+                            color: white;
+                            margin: 0;
+                        }
+                    }
+    
+                    .senderEmail{
+                        margin: 0;
+                        margin-left: 5px;
+                        font-size: 13px;
+                        color: gray;
+                    }
+                }
+    
+                .messageText{
+                    margin-top: 2px;
+                    padding: 5px 10px;
+                    background-color: #272727;
+                    color: white;
+                    width: fit-content;
+                    border-radius: 10px;
+                }
+    
+            }
+
+            .myMessage{
+                margin-left: auto;
+                .messageText{
+                    background-color: #14A76C;
+                }
+            }
+        }
+
+        .formInput{
+            display: flex;
+            align-items: center;
+            padding-right: 5px;
+            border-radius:  0 0 5px 5px;
+            border-top: 2px solid #272727;
+
+            .messageInput{
+                width: 100%;
+                border: none;
+                border-radius: 10px;
+                height: 30px;
+                padding-left: 5px;
+                outline: none;
+            }
+
+            button{
+                border: none;
+                background-color: transparent;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .sendButton{
+                    padding: 5px;
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 50%;
+                    background-color: rgb(255, 109, 59);
+                }
+
+            }
+        }
+
+    }
+}

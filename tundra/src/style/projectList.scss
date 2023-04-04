@@ -1,0 +1,17 @@
+.ProjectList{
+
+    .project{
+        cursor: pointer;
+
+        .trashIcon{
+            width: 15px;
+            height: 15px;
+    
+            fill: gray;
+    
+            &:hover{
+                fill: #272727;
+            }
+        }
+    }
+}

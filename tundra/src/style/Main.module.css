@@ -1,0 +1,17 @@
+.bg_container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    z-index: 0;
+    width: 100%;
+    height: inherit;
+    background-color: #272727;
+    overflow: hidden;
+    height: 100vh;
+}
+
+.bg_img{
+    width: 100%;
+    filter: opacity(10%);
+}

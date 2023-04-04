@@ -1,0 +1,6 @@
+export const MAIN_ROUTE = '/'
+export const SIGN_IN_ROUTE = '/signIn'
+export const SIGN_UP_ROUTE = '/signUp'
+export const PROJECT_LIST_ROUTE = '/myProjects'
+export const PROJECT_ROUTE = '/project'
+export const PROJECT_SETTINGS_ROUTE = '/project/settings'
