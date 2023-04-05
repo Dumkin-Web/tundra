@@ -47,7 +47,7 @@ const SignIn = () => {
 
             <div className="d-flex justify-content-between align-items-center mt-4">
                 <Link to={SIGN_UP_ROUTE} className="href tc-white tc-white-h fs-s fw-r">Already have an account?</Link>
-                <Button style={{border: "none"}} variant="dark" type="submit">Login</Button>
+                <Button style={{border: "none"}} variant="dark" type="submit">Sign in</Button>
             </div>
         </Form>
     )

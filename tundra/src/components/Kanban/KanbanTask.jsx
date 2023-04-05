@@ -69,11 +69,14 @@ const KanbanTask = ({task, onDragOver, onDragLeave, onDragStart, onDragEnd, onDr
 
     const getExecutor = (executorId) => {
         let result = ""
-        result = executors.map((exe) => {
+        executors.map((exe) => {
+            //console.log(exe);
             if(exe.id == executorId){
-                return `${exe.fullName} (${exe.email})`
+                console.log(exe);
+                result = `${exe.fullName.split(" ")[0]} (${exe.email})`
             }
-        })[0]
+        })
+        //console.log(result);
         return result
     }
 

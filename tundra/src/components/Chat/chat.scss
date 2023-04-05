@@ -32,7 +32,7 @@
 
         .chatHeader{
             display: flex;
-            //justify-content: center;
+            user-select: none;
             align-content: center;
             margin: 2px 0;
             .chatName{
@@ -82,7 +82,10 @@
                 }
     
                 .messageText{
+                    max-width: 200px;
                     margin-top: 2px;
+                    hyphens: auto;
+                    overflow-wrap: break-word;
                     padding: 5px 10px;
                     background-color: #272727;
                     color: white;

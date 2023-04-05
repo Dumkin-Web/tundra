@@ -21,6 +21,9 @@ function App() {
         dispatch(setAuthAction(data))
         setLoading(false)
       })
+      .catch(e => {
+        localStorage.clear()
+      })
     }
     else{
       setLoading(false)

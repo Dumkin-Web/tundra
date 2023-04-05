@@ -7,10 +7,30 @@ import { HandySvg } from "handy-svg";
 import check from '../../svgIcons/check-solid.svg'
 import { updateKanbanTask } from "../../http/kanbanApi";
 
+const converDeadline = (deadline) => {
+
+    if(!deadline){
+        return deadline
+    }
+
+    let result = ""
+
+    const date = (new Date(deadline)).toLocaleString().split(', ')
+
+    const tempDate = date[0].split('.').reverse().join('-')
+    const tempTime = date[1]
+
+    result += tempDate + 'T' + tempTime
+
+    return result
+
+}
+
 const KanbanTaskFullModal = ({show, setShow, task, setLoading}) => {
 
     const {id, name, description, done, timeSpent, executorId, kanbanColumnId} = task;
-    const deadline = String(task.deadline).slice(0, 16)
+
+    const deadline = converDeadline(task.deadline);
 
     const [projectId, executors] = useSelector(state => [state.project.id, state.project.executors])
 
@@ -26,7 +46,12 @@ const KanbanTaskFullModal = ({show, setShow, task, setLoading}) => {
         (new FormData(e.target)).forEach((value, key) => {
             console.log(key);
             if(key == 'deadline' && deadline != value){
-                requestData[key] = value;
+                if(value === ''){
+                    requestData[key] = null;
+                }
+                else{
+                    requestData[key] = value;
+                }
             }
             else if(key.toString() != 'deadline' && task[key] != value){
                 requestData[key] = value;

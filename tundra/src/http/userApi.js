@@ -30,3 +30,9 @@ export const refreshToken = async () => {
     localStorage.setItem('token', data.token)
     return jwt_decode(data.token)
 }
+
+export const getAllTasks = async () => {
+    const {data} = await $authHost.get('/api/user/getTasks')
+
+    return data
+}

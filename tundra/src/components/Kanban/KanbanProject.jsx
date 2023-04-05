@@ -7,8 +7,9 @@ import KanbanBoard from "./KanbanBoard";
 import Chat from "../Chat/Chat";
 import { Button } from "react-bootstrap";
 import InviteUserModal from "../InviteUserModal";
+import { createKanbanBoard } from "../../http/kanbanApi";
 
-const KanbanProject = () => {
+const KanbanProject = ({parentLoading}) => {
 
     const [id, name, projectType, boards, ownerId] = useSelector(state => [state.project.id, state.project.name, state.project.projectType, state.project.kanban_boards || [], state.project.ownerId])
     const userId = useSelector(state => state.user.id)
@@ -16,6 +17,9 @@ const KanbanProject = () => {
     const [loading, setLoading] = useState(true)
     const [loadingExe, setLoadingExe] = useState(true)
     const [showInvite, setShowInvite] = useState(false)
+
+    const [currentColumn, setCurrentColumn] = useState(null)
+    const [currentTask, setCurrentTask] = useState(null)
 
     const dispatch = useDispatch()
 
@@ -27,7 +31,7 @@ const KanbanProject = () => {
             })
             setLoading(false)
         })
-    }, [loading])
+    }, [loading, parentLoading])
 
     useEffect(() => {
         getProjectMembers({projectId: id}).then(members => {
@@ -35,6 +39,18 @@ const KanbanProject = () => {
             setLoadingExe(false)
         })
     }, [loadingExe])
+
+    const createNewBoard = async () => {
+
+        try{
+            const response = await createKanbanBoard(id)
+            setLoading(true)
+        }
+        catch(e){
+
+        }
+
+    }
 
     if(loadingExe){
         return <div></div>
@@ -52,8 +68,9 @@ const KanbanProject = () => {
                     </div>}
                 </div>
                 {boards.map(({id, name}, index) => {
-                    return <KanbanBoard key={id} id={id} index={index} setLoading={setLoading} />
+                    return <KanbanBoard key={id} id={id} index={index} setLoading={setLoading} currentColumn={currentColumn} setCurrentColumn={setCurrentColumn} currentTask={currentTask} setCurrentTask={setCurrentTask} />
                 })}
+                <Button className="mt-2" onClick={createNewBoard}>+ Board</Button>
             </div>
             <Chat connect={true} projectId={id} loading={loading} setLoading={setLoading}/>
             <InviteUserModal setLoading={setLoading} show={showInvite} setShow={setShowInvite} />

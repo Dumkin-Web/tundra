@@ -23,6 +23,7 @@ class KanbanController{
         }
     }
 
+    // TASK //
     async createTask(req, res, next){
         const {kanbanColumnId, name, description, order, deadline, executorId} = req.body
         try{
@@ -45,7 +46,7 @@ class KanbanController{
         try{
             const task = await KanbanTask.findOne({where: {id}})
             Object.keys(newTaskData).forEach((key) => {
-                if(task[key] != undefined){
+                if(task[key] !== undefined){
                     task[key] = newTaskData[key]
                 }
             })
@@ -74,6 +75,67 @@ class KanbanController{
         return res.status(200).json({message: 'Task deleted'})
     }
 
+    // BOARD //
+
+    async createBoard(req, res, next){
+        const projectId = req.projectId
+
+        try{
+            const project = await Project.findOne({where: {id: projectId}})
+
+            if(!project){
+                return next(ApiError.badRequest('Project id expected'))
+            }
+
+            const newBoard = await KanbanBoard.create({name: project.name, projectId})
+            const todoColumn = await KanbanColumn.create({name: "TODO", color: "#ff6d3b", kanbanBoardId: newBoard.id, order: 0})
+            const inWorkColumn = await KanbanColumn.create({name: "IN WORK", color: "#fff72b", kanbanBoardId: newBoard.id, order: 1})
+            const doneColumn = await KanbanColumn.create({name: "DONE", color: "#5fff2b", kanbanBoardId: newBoard.id, order: 2})
+
+            return res.status(201).json({message: "Board created"})
+        }
+        catch(e){
+            console.log(e);
+            return next(e)
+        }
+    }
+
+    async updateBoard(req, res, next){
+        const id = req.params.boardId
+
+        const newBoardData = req.body
+        try{
+            const board = await KanbanBoard.findOne({where: {id}})
+            Object.keys(newBoardData).forEach((key) => {
+                if(board[key] != undefined){
+                    board[key] = newBoardData[key]
+                }
+            })
+
+            board.save()
+        }
+        catch(e){
+            console.log(e);
+            return next(e)
+        }
+
+        return res.status(200).json({message: 'Board updated'})
+    }
+
+    async deleteBoard(req, res, next){
+        const id = req.params.boardId
+
+        try{
+            const board = await KanbanBoard.destroy({where: {id}})
+
+        }
+        catch(e){
+            console.log(e);
+            return next(e)
+        }
+
+        return res.status(200).json({message: 'Board deleted'})
+    }
 
     async getProject(req, res, next){
         const id = req.projectId;

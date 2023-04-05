@@ -10,6 +10,11 @@ const getSender = (senderId, senders) => {
     }
   })
 
+  if(sender.email == undefined){
+    sender.fullName = "L"
+    sender.email = 'User left'
+  }
+
   return sender
 }
 

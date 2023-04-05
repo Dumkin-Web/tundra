@@ -17,10 +17,12 @@ const projectController = require('../../controllers/projectController')
 router.post('/newProject', projectController.createProject)
 router.get('/projectTypes', projectController.projectTypes)
 router.get('/allProjects', projectController.getAllProjects)
-router.get('/:projectId/members', projectController.getAllMembers)
-router.get('/:projectId/messages', projectController.getAllMessages)
-router.post('/:projectId/invite', projectController.inviteUser)
-router.delete('/:projectId', projectController.deleteProject)
+router.get('/:projectId', projectMiddleware, projectController.getProjectData)
+router.get('/:projectId/members', projectMiddleware, projectController.getAllMembers)
+router.get('/:projectId/messages', projectMiddleware, projectController.getAllMessages)
+router.post('/:projectId/invite', projectMiddleware, projectController.inviteUser)
+router.delete('/:projectId', projectMiddleware, projectController.deleteProject)
+router.post('/:projectId/leaveFromProject', projectController.leaveFromProject)
 
 
 //Написать настройку проекта и сделать мидлвеар для проверки овнера

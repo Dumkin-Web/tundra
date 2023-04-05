@@ -1,0 +1,80 @@
+.myTasks{
+    margin-top: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    .calendar{
+        width: 1200px;
+        user-select: none;
+        .calendarHeader{
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+
+            .chevron{
+                width: 20px;
+                height: 20px;
+                fill: #FFE400;
+                cursor: pointer;
+                margin-right: 5px;
+            }
+
+            .name{
+                color: #FFE400;
+                font-size: 24px;
+                font-weight: 500;
+                margin-right: 5px;
+                user-select: none;
+                width: 180px;
+                text-align: center;
+            }
+        }
+
+        .calendarBody{
+            display: grid;
+            grid-template-columns: repeat(7, auto);
+            gap: 11px;
+
+            .calendarDate{
+                min-height: 86px;
+                width: 162px;
+                border: 2px solid #03FF9A;
+                border-radius: 10px;
+                padding: 5px;
+                box-sizing: border-box;
+                //height: fit-content;
+
+                .dateHeader{
+                    font-size: 19px;
+                    font-weight: 500;
+                    color: #03FF9A;
+                }
+
+                .deadline{
+                    background-color: #f7f200;
+                    width: 100%;
+                    margin-top: 5px;
+                    padding: 5px;
+                    border-radius: 5px;
+                    position: relative;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    .name{
+                        color: #232323;
+                        font-size: 16px;
+                        font-weight: 500;
+                        overflow-wrap: break-word;
+                        margin-right: 5px;
+                    }
+
+                    .time{
+                        font-size: 16px;
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
+}

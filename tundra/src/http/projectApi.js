@@ -53,3 +53,25 @@ export const inviteUserQuery = async ({projectId, email}) => {
     
     return data
 }
+
+export const leaveFromProjectQuery = async ({projectId, userId}) => {
+    const {data} = await $authHost.post(`/api/project/${projectId}/leaveFromProject`, {userId}, {
+        headers: {
+            'content-type' : 'application/json'
+        }
+    })
+    
+    return data
+}
+
+export const deleteProjectQuery = async ({projectId}) => {
+    const {data} = await $authHost.delete(`/api/project/${projectId}`)
+    
+    return data
+}
+
+export const getProjectQuery = async ({projectId}) => {
+    const {data} = await $authHost.get(`/api/project/${projectId}`)
+    
+    return data
+}

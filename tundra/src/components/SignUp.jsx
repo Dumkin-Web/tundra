@@ -43,8 +43,8 @@ const SignUp = () => {
       <Form onSubmit={registration} className="bg-dark-green p-4 rounded" style={{width: "400px"}}>
         <h1 style={{textAlign: "center"}} className="tc-white fs-xl">Sign In</h1>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-          <Form.Label className="fs-m tc-white">Email address</Form.Label>
-          <Form.Control type="text" name="fullName" autoComplete="fullName" placeholder="Sergeev Sergey Sergeevich" style={{border: 'none'}}/>
+          <Form.Label className="fs-m tc-white">Name & Surname</Form.Label>
+          <Form.Control type="text" name="fullName" autoComplete="fullName" placeholder="Sergeev Sergey" style={{border: 'none'}}/>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
@@ -65,7 +65,7 @@ const SignUp = () => {
 
         <div className="d-flex justify-content-between align-items-center mt-4">
           <Link to={SIGN_IN_ROUTE} className="href tc-white tc-white-h fs-s fw-r">Already have an account?</Link>
-          <Button style={{border: "none"}} variant="dark" type="submit">Login</Button>
+          <Button style={{border: "none"}} variant="dark" type="submit">Sign Up</Button>
         </div>
     </Form>
     )

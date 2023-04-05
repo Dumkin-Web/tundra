@@ -74,19 +74,19 @@ Project.belongsToMany(User, {through: UserProjects})
 ProjectType.hasMany(Project)
 Project.belongsTo(ProjectType)
 
-Project.hasOne(Chat)
+Project.hasOne(Chat, {onDelete: 'cascade'})
 Chat.belongsTo(Project)
 
-Chat.hasMany(Message)
+Chat.hasMany(Message, {onDelete: 'cascade'})
 Message.belongsTo(Chat)
 
-Project.hasMany(KanbanBoard)
+Project.hasMany(KanbanBoard, {onDelete: 'cascade'})
 KanbanBoard.belongsTo(Project)
 
-KanbanBoard.hasMany(KanbanColumn)
+KanbanBoard.hasMany(KanbanColumn, {onDelete: 'cascade'})
 KanbanColumn.belongsTo(KanbanBoard)
 
-KanbanColumn.hasMany(KanbanTask)
+KanbanColumn.hasMany(KanbanTask, {onDelete: 'cascade'})
 KanbanTask.belongsTo(KanbanColumn)
 
 

@@ -9,6 +9,10 @@ import Message from "./Message";
 import grabIcon from '../../svgIcons/up-down-left-right-solid.svg'
 import hideIcon from '../../svgIcons/grip-lines-solid.svg'
 import sendIcon from '../../svgIcons/arrow-up-solid.svg'
+
+import notify from '../../audio/message-tone-checked-off.ogg'
+import notification from '../../audio/meet-message-sound-1.mp3'
+
 import { HandySvg } from "handy-svg";
 
 const Chat = ({connect, projectId, loading, setLoading}) => {
@@ -22,6 +26,8 @@ const Chat = ({connect, projectId, loading, setLoading}) => {
     const chat = useRef()
     const messageInput = useRef()
     const chatMessages = useRef()
+    const sideNotification = useRef()
+    const myNotification = useRef()
 
     const [socket, setSocket] = useState(io(process.env.REACT_APP_SERVER_URL, {
       autoConnect: false
@@ -57,8 +63,13 @@ const Chat = ({connect, projectId, loading, setLoading}) => {
       });
 
       socket.on('private_message', (message) => {
-
-          setMessages(messages => [...messages, message])
+        if(message.senderId != userId){
+          sideNotification.current.play()
+        }
+        else{
+          myNotification.current.play()
+        }
+        setMessages(messages => [...messages, message])
 
       })
 
@@ -168,6 +179,12 @@ const Chat = ({connect, projectId, loading, setLoading}) => {
             </form>
           </div>
         </div>
+        <audio ref={sideNotification} hidden>
+          <source src={notification} type="audio/mp3"/>
+        </audio>
+        <audio ref={myNotification} hidden>
+          <source src={notify} type="audio/ogg"/>
+        </audio>
       </div>
     )
 };

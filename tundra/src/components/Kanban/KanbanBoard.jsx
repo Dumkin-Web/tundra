@@ -1,11 +1,16 @@
-import React, { useState } from "react"
+import React, { useEffect, useReducer, useRef, useState } from "react"
 import { useSelector } from "react-redux";
 import KanbanTaskCreationModal from "../modals/KanbanTaskCreationModal";
-import { updateKanbanTask } from "../../http/kanbanApi";
+import { deleteKanbanBoard, updateKanbanBoard, updateKanbanTask } from "../../http/kanbanApi";
 import KanbanTask from "./KanbanTask";
+import { HandySvg } from "handy-svg";
 
-const KanbanBoard = ({id, index, setLoading}) => {
+import pen from '../../svgIcons/pen-solid.svg'
+import trash from '../../svgIcons/trash-solid.svg'
 
+const KanbanBoard = ({id, index, setLoading, currentColumn, setCurrentColumn, currentTask, setCurrentTask}) => {
+
+    const projectId = useSelector(state => state.project.id)
     const board = useSelector(state => state.project.kanban_boards[index])
     const [show, setShow] = useState(false)
 
@@ -14,8 +19,13 @@ const KanbanBoard = ({id, index, setLoading}) => {
         return temp
     }
 
-    const [currentColumn, setCurrentColumn] = useState(null)
-    const [currentTask, setCurrentTask] = useState(null)
+    const [editBoardName, setEditBoardName] = useState(false)
+
+    const boardNameInput = useRef()
+
+    useEffect(() => {
+        console.log(currentTask);
+    }, [currentTask])
 
     const dragOverHandler = (e) => {
         e.preventDefault()
@@ -44,18 +54,52 @@ const KanbanBoard = ({id, index, setLoading}) => {
     const dropCardHandler = async (e, column) => {
         e.preventDefault();
         e.target.style.opacity = '1'
-        if(column.id === currentColumn.id){
-            return
+        try{
+            if(column.id === currentColumn.id){
+                return
+            }
         }
+        catch(e){
+
+        }
+        console.log(column.id);
+        console.log(currentTask.id);
 
         const response = await updateKanbanTask({kanbanColumnId: column.id}, board.projectId, currentTask.id)
+        setLoading(true)
+    }
+
+    const changeBoardName = async () => {
+        if(editBoardName && board.name != boardNameInput.current.value){
+
+            const requestBody = {name: boardNameInput.current.value}
+            
+            const response = await updateKanbanBoard(requestBody, projectId, id)
+
+            setLoading(true)
+        }
+    }
+
+    const deleteBoard = async () => {
+
+        const response = await deleteKanbanBoard(projectId, id)
+
         setLoading(true)
     }
 
     return (
         <>
             <div className="kanbanBoard">
-            <h2 className="tc-orange fs-l fw-m">{board.name}</h2>
+            <div className="kanbanNaming">
+                <div>
+                    {editBoardName ? 
+                        <input ref={boardNameInput} onSubmit={() => {changeBoardName(); setEditBoardName(!editBoardName);}} type="text" className="inputBoardName tc-orange fs-l fw-m" placeholder="Name the board" defaultValue={board.name} /> : 
+                        <h2 className="tc-orange fs-l fw-m">{board.name}</h2>
+                    }
+                    <HandySvg className="editName" src={pen} onClick={() => {changeBoardName(); setEditBoardName(!editBoardName);}}/>
+                </div>
+                <HandySvg className="deleteBoard" onClick={deleteBoard} src={trash} />
+            </div>
 
             <div className="board">
                 {sortColumns(board.kanban_columns).map((column, index) => {
@@ -66,7 +110,7 @@ const KanbanBoard = ({id, index, setLoading}) => {
                                 onDrop={(e) => dropCardHandler(e, column)}
                             >
                                 <div className="columnHeader">
-                                    <h3 className="tc-dark fs-l fw-m">{column.name}</h3>
+                                    <h3 className="tc-dark fs-l fw-m">{column.name}</h3>  
                                     <button onClick={() => setShow(true)}>New task</button>
                                 </div>
                                 <div className="columnTasks">

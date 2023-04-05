@@ -1,4 +1,4 @@
-const {User} = require('../models/models')
+const {User, KanbanTask} = require('../models/models')
 const ApiError = require('../errors/ApiError')
 const { where } = require('sequelize')
 const bcrypt = require('bcrypt')
@@ -77,6 +77,25 @@ class UserController {
         }
 
         return res.status(200).json(user)
+    }
+
+    async getTasks(req, res, next){
+        
+        const { id } = req.user
+
+        try{
+            const tasks = await KanbanTask.findAll({where: {executorId: id}})
+
+            //console.log(tasks);
+            //Добавить остальные типы проектов
+            if(!tasks){
+                return res.status(200).json([])
+            }
+            return res.status(200).json(tasks)
+        }
+        catch(e){
+            next(e)
+        }
     }
 
 }

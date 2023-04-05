@@ -56,7 +56,8 @@ class ProjectController {
 
         try{
 
-            const deletedProject = Project.destroy({where: {id}})
+            const deletedProject = await Project.destroy({where: {id}})
+            const deleteRelation = await UserProjects.destroy({where: {projectId: id}})
             
             return res.status(200).json({message: 'Project was deleted'})
 
@@ -211,6 +212,55 @@ class ProjectController {
         }
 
 
+    }
+
+    async leaveFromProject(req, res, next){
+        const projectId = req.params.projectId
+        const {userId} = req.body
+
+        if(projectId == 'undefined' || !projectId){
+            return next(ApiError.badRequest('Project id expected'))
+        }
+
+        if(!userId){
+            return next(ApiError.badRequest('User id expected'))
+        }
+
+        try{
+            const project = await Project.findOne({where: {id: projectId}})
+
+            if(project.ownerId == userId){
+                return next(ApiError.badRequest("User can't leave from project, because he's owner"))
+            }
+
+            const userProject = await UserProjects.destroy({where: {userId, projectId}})
+            
+            return res.status(200).json({message: 'User left from project'})
+
+        } catch(e){
+            console.log(e);
+            return next(e)
+        }
+
+
+    }
+
+    async getProjectData(req, res, next){
+        const projectId = req.params.projectId
+
+        if(projectId == 'undefined' || !projectId){
+            return next(ApiError.badRequest('Project id expected'))
+        }
+
+        try{
+            const project = await Project.findOne({where: {id: projectId}})
+            
+            return res.status(200).json(project)
+
+        } catch(e){
+            console.log(e);
+            return next(e)
+        }
     }
 
 }
