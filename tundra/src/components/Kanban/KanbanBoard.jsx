@@ -110,7 +110,7 @@ const KanbanBoard = ({id, index, setLoading, currentColumn, setCurrentColumn, cu
                                 onDrop={(e) => dropCardHandler(e, column)}
                             >
                                 <div className="columnHeader">
-                                    <h3 className="tc-dark fs-l fw-m">{column.name}</h3>  
+                                    <h3 className="tc-dark fs-l fw-m">{column.name}</h3>
                                     <button onClick={() => setShow(true)}>New task</button>
                                 </div>
                                 <div className="columnTasks">
@@ -128,6 +128,7 @@ const KanbanBoard = ({id, index, setLoading, currentColumn, setCurrentColumn, cu
                                                 </KanbanTask>
                                     })}
                                 </div>
+                                { +column.wip < 100 && <h3 className="wip">WIP {column.wip}</h3>}
                             </div>
                 })}
             </div>

@@ -28,7 +28,9 @@ const converDeadline = (deadline) => {
 
 const KanbanTaskFullModal = ({show, setShow, task, setLoading}) => {
 
-    const {id, name, description, done, timeSpent, executorId, kanbanColumnId} = task;
+    const {id, name, description, done, timeSpent, executorId, kanbanColumnId, wip} = task;
+
+    const inWork = converDeadline(task.inWork)
 
     const deadline = converDeadline(task.deadline);
 
@@ -56,6 +58,18 @@ const KanbanTaskFullModal = ({show, setShow, task, setLoading}) => {
             else if(key.toString() != 'deadline' && task[key] != value){
                 requestData[key] = value;
             }
+
+            if(key == 'inWork' && deadline != value){
+                if(value === ''){
+                    requestData[key] = null;
+                }
+                else{
+                    requestData[key] = value;
+                }
+            }
+            else if(key.toString() != 'inWork' && task[key] != value){
+                requestData[key] = value;
+            }
         })
 
         if(Object.keys(requestData).length != 0){
@@ -77,17 +91,12 @@ const KanbanTaskFullModal = ({show, setShow, task, setLoading}) => {
 
                     <Form.Group>
                         <Form.Label className="fs-m tc-dark">Task name</Form.Label>
-                        <Form.Control ref={nameInput} type="text" name="name" autoComplete="no" placeholder="Todo..." defaultValue={name} readOnly={!edit}/>
+                        <Form.Control ref={nameInput} type="text" name="name" autoComplete="off" placeholder="Todo..." defaultValue={name} readOnly={!edit}/>
                     </Form.Group>
 
                     <Form.Group>
                         <Form.Label className="fs-m tc-dark mt-4">Task description</Form.Label>
-                        <Form.Control type="text" as="textarea" name="description" autoComplete="no" placeholder="Describe your task" defaultValue={description} readOnly={!edit}/>
-                    </Form.Group>
-
-                    <Form.Group>
-                        <Form.Label className="fs-m tc-dark mt-4">Task deadline</Form.Label>
-                        <Form.Control type="datetime-local" name="deadline" autoComplete="no" onChange={(e) => console.log(e.target.value)} defaultValue={deadline} readOnly={!edit}/>
+                        <Form.Control type="text" as="textarea" name="description" autoComplete="off" placeholder="Describe your task" defaultValue={description} readOnly={!edit}/>
                     </Form.Group>
 
                     <Form.Group>
@@ -98,6 +107,16 @@ const KanbanTaskFullModal = ({show, setShow, task, setLoading}) => {
                                 return <option key={id} value={id}>{fullName} ({email})</option>
                             })}
                         </Form.Select>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label className="fs-m tc-dark mt-4">Start of task execution</Form.Label>
+                        <Form.Control type="datetime-local" name="inWork" autoComplete="off" defaultValue={inWork} readOnly={!edit}/>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label className="fs-m tc-dark mt-4">Task deadline</Form.Label>
+                        <Form.Control type="datetime-local" name="deadline" autoComplete="off" defaultValue={deadline} readOnly={!edit}/>
                     </Form.Group>
 
                 </Modal.Body>

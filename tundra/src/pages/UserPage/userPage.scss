@@ -1,0 +1,34 @@
+.userProfile{
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .userContainer{
+        width: 600px;
+        background-color: white;
+        border-radius: 10px;
+        padding: 40px;
+
+        .profileHeader{
+            font-size: 32px;
+            text-align: center;
+            font-weight: 500;
+            color: #272727
+        }
+
+        .userInfo{
+
+            .buttonsContainer{
+
+                display: flex;
+                justify-content: space-between;
+
+                div{
+                    display: flex;
+                }
+
+            }
+        }
+    }
+}

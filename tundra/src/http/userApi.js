@@ -36,3 +36,20 @@ export const getAllTasks = async () => {
 
     return data
 }
+
+export const getAllDialogs = async () => {
+    const {data} = await $authHost.get('/api/user/getAllDialogs')
+
+    return data
+}
+
+export const updateUser = async (newUserData) => {
+    const {data} = await $authHost.patch('/api/user/updateUser', newUserData, {
+        headers: {
+            'content-type' : 'application/json'
+        }
+    })
+    
+    localStorage.setItem('token', data.token)
+    return jwt_decode(data.token)
+}

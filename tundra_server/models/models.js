@@ -67,6 +67,21 @@ const Message = sequelize.define('message', {
     senderId: {type: DataTypes.INTEGER},
 })
 
+//PRIVATE DIALOG //NEW!!!
+
+const UserDialogs = sequelize.define('user_dialogs', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+})
+
+const Dialog = sequelize.define('dialog', {
+    id: {type:  DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
+})
+
+const DialogMessage = sequelize.define('dialog_message', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    text: {type: DataTypes.TEXT},
+    senderId: {type: DataTypes.INTEGER},
+})
 
 User.belongsToMany(Project, {through: UserProjects})
 Project.belongsToMany(User, {through: UserProjects})
@@ -89,7 +104,17 @@ KanbanColumn.belongsTo(KanbanBoard)
 KanbanColumn.hasMany(KanbanTask, {onDelete: 'cascade'})
 KanbanTask.belongsTo(KanbanColumn)
 
+//NEW!!!(DIALOG)
 
+User.belongsToMany(Dialog, {through: UserDialogs})
+Dialog.belongsToMany(User, {through: UserDialogs})
+
+Dialog.hasMany(DialogMessage, {onDelete: 'cascade'})
+DialogMessage.belongsTo(Dialog)
+
+
+
+//EXPORTS//
 module.exports = {
     User, 
     UserProjects, 
@@ -99,5 +124,8 @@ module.exports = {
     KanbanColumn, 
     KanbanTask, 
     Chat, 
-    Message
+    Message,
+    UserDialogs,
+    Dialog,
+    DialogMessage
 }

@@ -143,3 +143,25 @@ body{
     color: gray;
     transform: translateY(100%);
 }
+
+.headerUserIcon{
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    fill: #14A76C;
+}
+
+.headerUserIcon:hover{
+    fill: #03FF9A;
+}
+
+.leaveIconUniqe{
+    width: 20px;
+    height: 20px;
+    fill: gray;
+    cursor: pointer;
+}
+
+.leaveIconUniqe:hover{
+    fill: #272727;
+}

@@ -1,0 +1,60 @@
+.dialogsPage{
+    display: flex;
+    justify-content: center;
+
+    .dPageContainer{
+
+        width: 1200px;
+        color: white;
+
+        .dialogPageHeader{
+
+            width: 100%;
+
+            .pageName{
+
+                font-size: 32px;
+                font-weight: 500;
+            }
+        }
+
+        .dialogPageBody{
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap-reverse;
+
+            .dialogsList{
+                width: 590px;
+
+                .projectDialogsList{
+                    
+                }
+
+                .privateDialogsList{
+
+                }
+
+                .dialogTab{
+                    width: 100%;
+                    background-color: white;
+                    border-radius: 10px;
+                    margin-bottom: 10px;
+                    padding: 10px;
+
+                    .dialogName{
+                        font-size: 16px;
+                        font-weight: 500;
+                        color: #272727;
+                    }
+                }
+            }
+
+            .dialog{
+                //margin-left: 20px;
+                width: 590px;
+                background-color: white;
+                border-radius: 10px;
+            }
+        }
+    }
+}

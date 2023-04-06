@@ -1,13 +1,13 @@
 const defaultState = {
-    id: "",
+    id: "1",
     name: "",
-    projectType: ""
+    dialogType: ""
 }
 
 
 const SET_PROJECT = "SET_PROJECT"
 
-export const projectReducer = (state = defaultState, action) => {
+export const dialogReducer = (state = defaultState, action) => {
     const payload = action.payload
 
     switch (action.type) {
@@ -21,4 +21,4 @@ export const projectReducer = (state = defaultState, action) => {
     }
 }
 
-export const setProjectAction = (payload) => ({type: SET_PROJECT, payload})
+export const setDialogAction = (payload) => ({type: SET_PROJECT, payload})

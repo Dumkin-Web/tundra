@@ -1,9 +1,11 @@
 import Auth from "../pages/Auth"
+import DialogsPage from "../pages/DialogPage/DialogsPage"
 import Main from "../pages/Main"
 import MyTasks from "../pages/MyTasks"
 import ProjectPage from "../pages/ProjectPage"
 import ProjectList from "../pages/ProjectsList"
-import { MAIN_ROUTE, MY_TASKS_ROUTE, PROJECT_LIST_ROUTE, PROJECT_ROUTE, PROJECT_SETTINGS_ROUTE, SIGN_IN_ROUTE, SIGN_UP_ROUTE } from "./consts"
+import UserPage from "../pages/UserPage/UserPage"
+import { DIALOGS_ROUTE, MAIN_ROUTE, MY_TASKS_ROUTE, PROJECT_LIST_ROUTE, PROJECT_ROUTE, PROJECT_SETTINGS_ROUTE, SIGN_IN_ROUTE, SIGN_UP_ROUTE, USER_ROUTE } from "./consts"
 
 export const authRoutes = [
     {
@@ -21,6 +23,14 @@ export const authRoutes = [
     {
         path: MY_TASKS_ROUTE,
         Element: <MyTasks />
+    },
+    {
+        path: DIALOGS_ROUTE,
+        Element: <DialogsPage />
+    },
+    {
+        path: USER_ROUTE,
+        Element: <UserPage />
     },
 ]
 

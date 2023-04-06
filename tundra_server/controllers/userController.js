@@ -1,6 +1,6 @@
-const {User, KanbanTask} = require('../models/models')
+const {User, KanbanTask, Chat, Project, Dialog} = require('../models/models')
 const ApiError = require('../errors/ApiError')
-const { where } = require('sequelize')
+const { where, Op } = require('sequelize')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -95,6 +95,94 @@ class UserController {
         }
         catch(e){
             next(e)
+        }
+    }
+
+    async getAllDialogs(req, res, next){
+        
+        const { id } = req.user
+
+        try{
+            const response = {}
+
+            const projectDialogs = await Chat.findAll({
+                include: [{
+                    model: Project,
+                    required: true,
+                    include: [{
+                        model: User,
+                        required: true,
+                        where: {id}
+                    }]
+                }]
+            })
+
+            const privateDialogsIds = await Dialog.findAll({
+                include: [{
+                    model: User,
+                    required: true,
+                    where: {id},
+                    attributes: []
+                }],
+                attributes: ['id']
+            })
+
+            const dialogIds = privateDialogsIds.map(d => {
+                return {id: d.id}
+            })
+
+            const privateDialogs = await Dialog.findAll({
+                where: {
+                    [Op.or]: dialogIds
+                },
+                include: [{
+                    model: User,
+                    where: {id: {[Op.ne]: id}}
+                }]
+            })
+
+            response.projectDialogs = projectDialogs
+            response.privateDialogs = privateDialogs
+
+            // if(!projectDialogs){
+            //     return res.status(200).json([])
+            // }
+            return res.status(200).json(response)
+        }
+        catch(e){
+            next(e)
+            console.log(e);
+        }
+    }
+
+    async updateUser(req, res, next){
+        
+        const { id } = req.user
+
+        const newUserData = req.body
+
+        try{
+            const user = await User.findOne({where: {id}})
+
+            if(newUserData.password){
+                const hashPassword = await bcrypt.hash(newUserData.password, 5)
+                user.password = hashPassword;
+                delete newUserData.password;
+            }
+
+            Object.keys(newUserData).forEach((key) => {
+                if(user[key] !== undefined){
+                    user[key] = newUserData[key]
+                }
+            })
+            
+
+            user.save()
+            return res.status(200).json({token: generateJWT(user.email, user.fullName, user.id)})
+        }
+        catch(e){
+            next(e)
+            console.log(e);
         }
     }
 

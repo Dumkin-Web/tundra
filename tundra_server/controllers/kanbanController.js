@@ -25,9 +25,9 @@ class KanbanController{
 
     // TASK //
     async createTask(req, res, next){
-        const {kanbanColumnId, name, description, order, deadline, executorId} = req.body
+        const {kanbanColumnId, name, description, order, deadline, executorId, inWork} = req.body
         try{
-            const newTask = await KanbanTask.create({kanbanColumnId, name, description, order, deadline, executorId: executorId ?? -1})
+            const newTask = await KanbanTask.create({kanbanColumnId, name, description, order, deadline, executorId: executorId ?? -1, inWork })
         }
         catch(e){
             console.log(e);

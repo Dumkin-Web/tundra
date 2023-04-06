@@ -11,7 +11,13 @@ const Calendar = ({year, setYear, month, setMonth, d, name, tasks}) => {
     const getMonthlyTasks = () => {
         const tempMonthly = []
         const tempOther = []
-        for(let i = 1; i < d+1; i++ ){
+        let monthDayQuantity = d;
+
+        if(!((year - 2020) / 4).toString().includes('.') && month == 1){
+            monthDayQuantity += 1
+        }  
+
+        for(let i = 1; i < monthDayQuantity+1; i++ ){
             const tempT = Array.from(tasks).map((task) => {
                 if(task.deadline){
                     const tempDate = new Date(task.deadline)
@@ -19,9 +25,6 @@ const Calendar = ({year, setYear, month, setMonth, d, name, tasks}) => {
                     if(tempDate.getFullYear() == year && tempDate.getMonth() == month && tempDate.getDate() == i){
                         return task
                     }
-                }
-                else{
-                    tempOther.push(task)
                 }
             })
             if(tempT){
@@ -31,6 +34,12 @@ const Calendar = ({year, setYear, month, setMonth, d, name, tasks}) => {
                 tempMonthly.push([])
             }
         }
+
+        Array.from(tasks).map((task) => {
+            if(!task.deadline){
+                tempOther.push(task)
+            }
+        })
 
         return [tempMonthly, tempOther]
 
@@ -75,6 +84,18 @@ const Calendar = ({year, setYear, month, setMonth, d, name, tasks}) => {
                         return <CalendarDate key={index} dayIndex={index} tasks={day} />
                     }
                 })}
+            </div>
+            <div className="tasksWithoutDeadline tc-white">
+                <div className="wdHeader">
+                    Tasks without deadline
+                </div>
+                <div className="wDBody">
+                    {taskList[1].map((day, index) => {
+                        return  <div key={index} className="taskWD">
+                                    {day.name}
+                                </div>
+                    })}
+                </div>
             </div>
         </div>
     )

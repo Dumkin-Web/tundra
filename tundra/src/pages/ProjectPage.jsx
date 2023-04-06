@@ -6,16 +6,6 @@ import Chat from "../components/Chat/Chat";
 import { setProjectAction } from "../store/projectReducers";
 import { getProjectQuery, getProjectTypes } from "../http/projectApi";
 
-const findProject = (projects, projectId) => {
-    const result = projects.map((project) => {
-      if(project.id == projectId){
-        return project
-      }
-    })[0]
-
-    return result
-}
-
 const ProjectPage = () => {
 
   const dispatch = useDispatch()

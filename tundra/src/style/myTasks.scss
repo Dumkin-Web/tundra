@@ -76,5 +76,40 @@
                 }
             }
         }
+
+        .tasksWithoutDeadline{
+
+            margin-top: 20px;
+
+            .wdHeader{
+                margin: 10px 0;
+                color: #FFE400;
+                font-size: 24px;
+                font-weight: 500;
+                user-select: none;
+            }
+
+            .wDBody{
+                display: flex;
+                align-items: flex-start;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+
+                .taskWD{
+                    background-color: white;
+                    padding: 5px;
+                    padding-right: 20px;
+                    border-radius: 5px;
+                    color: #232323;
+                    font-size: 16px;
+                    font-weight: 500;
+                    overflow-wrap: break-word;
+                    margin-right: 5px;
+                    margin-bottom: 5px;
+                    max-width: 300px;
+                }
+            }
+
+        }
     }
 }

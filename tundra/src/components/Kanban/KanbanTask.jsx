@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 import flag from '../../svgIcons/flag-checkered-solid.svg'
 import trash from '../../svgIcons/trash-solid.svg'
+import start from '../../svgIcons/play-solid.svg'
 import { deleteKanbanTask, updateKanbanTask } from "../../http/kanbanApi";
 
 const KanbanTask = ({task, onDragOver, onDragLeave, onDragStart, onDragEnd, onDrop, setLoading}) => {
@@ -22,47 +23,21 @@ const KanbanTask = ({task, onDragOver, onDragLeave, onDragStart, onDragEnd, onDr
         }
         const deadlineDate = new Date(deadline)
         const currentDate = new Date(Date.now())
+        const offset = deadlineDate.getTimezoneOffset() * -60 * 1000
+        console.log(offset);
+        console.log(deadlineDate - currentDate);
+        const estimatedTime = new Date(deadlineDate - currentDate - offset)
 
-        const eMonth = deadlineDate.getMonth() - currentDate.getMonth()//estimatedTime.getMonth()
-        const eWeek = Math.floor((deadlineDate.getDate() - currentDate.getDate()) / 7)//Math.floor(estimatedTime.getDate() / 7)
-        const eDay = deadlineDate.getDate() - currentDate.getDate()//estimatedTime.getDate()
-        const eHours = deadlineDate.getHours() - currentDate.getHours()//estimatedTime.getHours()
-        const eMinutes = deadlineDate.getMinutes() - currentDate.getMinutes()//estimatedTime.getMinutes()
+        console.log(estimatedTime);
+        const eMonth = estimatedTime.getMonth()
+        const eDay = estimatedTime.getDate() - 1
+        const eHours = estimatedTime.getHours()
+        const eMinutes = estimatedTime.getMinutes()
 
-        if(Math.abs(eMonth) == 1){
-            return eMonth + ' month'
-        }
-        else if(Math.abs(eMonth) > 1){
-            return eMonth + ' months'
-        }
+        console.log(eHours);
 
-        if(Math.abs(eWeek) == 1){ 
-            return eWeek + ' week'
-        }
-        else if(Math.abs(eWeek) > 1){
-            return eWeek + ' weeks'
-        }
-
-        if(Math.abs(eDay) == 1){
-            return eDay + ' day'
-        }
-        else if(Math.abs(eDay) > 1){
-            return eDay + ' days'
-        }
-
-        if(Math.abs(eHours) == 1){
-            return eHours + ' hour'
-        }
-        else if(Math.abs(eHours) > 1){
-            return eHours + ' hours'
-        }
-
-        if(Math.abs(eMinutes) == 1){
-            return eMinutes + ' minute'
-        }
-        else if(Math.abs(eMinutes) > 1){
-            return eMinutes + ' minutes'
-        }
+        if(deadlineDate - currentDate)
+        return `${eMonth}m ${eDay}d ${eHours}h ${eMinutes}m`
 
         return "Overdue"
     }
@@ -70,13 +45,10 @@ const KanbanTask = ({task, onDragOver, onDragLeave, onDragStart, onDragEnd, onDr
     const getExecutor = (executorId) => {
         let result = ""
         executors.map((exe) => {
-            //console.log(exe);
             if(exe.id == executorId){
-                console.log(exe);
                 result = `${exe.fullName.split(" ")[0]} (${exe.email})`
             }
         })
-        //console.log(result);
         return result
     }
 
@@ -88,27 +60,72 @@ const KanbanTask = ({task, onDragOver, onDragLeave, onDragStart, onDragEnd, onDr
         setLoading(true)
     }
 
+    const startTask = async (e) => {
+        e.stopPropagation()
+
+        if(task.inWord){
+            return
+        }
+
+        const currentDate = new Date(Date.now())
+
+        const response = await updateKanbanTask({inWork: currentDate}, projectId, task.id)
+
+        setLoading(true)
+
+    }
+
     const finishTask = async (e) => {
         e.stopPropagation()
 
-        const response = await updateKanbanTask({done: true}, projectId, task.id)
+        const currentDate = new Date(Date.now())
+
+        const response = await updateKanbanTask({done: true, timeSpent: currentDate}, projectId, task.id)
 
         setLoading(true)
+    }
+
+    const getSpentTime = () => {
+        let result = ""
+        if(!task.timeSpent || !task.inWork){
+            console.log('cant calculate');
+            return result
+        }
+
+        const start = new Date(task.inWork)
+        const end = new Date(task.timeSpent)
+
+        const offset = start.getTimezoneOffset() * -60 * 1000
+        
+        const odd = new Date(end - start - offset);
+
+        const month = odd.getMonth();
+        const days = odd.getDate() - 1;
+        const hours = odd.getHours() - offset;
+        const minutes = odd.getMinutes();
+        const seconds = odd.getSeconds();
+
+        result = `${month}m ${days}d ${hours}h ${minutes}m ${seconds}s`
+
+        return result
     }
 
     return (
         <>
             <div className="kanbanTask" onClick={() => setShowFull(true)} draggable={true} onDragOver={onDragOver} onDragLeave={onDragLeave} onDragStart={onDragStart} onDragEnd={onDragEnd} onDrop={onDrop}>
-                <div className="taskHeader">
-                    <h4 style={{textDecoration: decoration}}>{task.name}</h4>
-                    {!task.done && <HandySvg className="finishButton" onClick={finishTask} src={flag} />}
+                <div className="infoContainer">
+                    <div className="taskHeader">
+                        <h4 style={{textDecoration: decoration}}>{task.name}</h4>
+                    </div>
+
+                    {!task.done && <div className="deadline">{convertDeadline(task.deadline)}</div>}
+                    {task.done && <div className="timeSpent">{getSpentTime()}</div>}
+                    <div className="executor">{getExecutor(task.executorId)}</div>
                 </div>
-
-                {!task.done && <div className="deadline">{convertDeadline(task.deadline)}</div>}
-                <div className="executor">{getExecutor(task.executorId)}</div>
-
-                <div className="taskFooter">
-                    <HandySvg className="trashButton" src={trash} onClick={deleteTask}/>
+                <div className="buttonContainer">
+                    <HandySvg className="taskButton" onClick={finishTask} style={{fill: task.done && 'white'}} src={flag}/>
+                    <HandySvg className="taskButton" src={start} style={{fill: task.inWork && 'white'}} onClick={startTask}/>
+                    <HandySvg className="taskButton" src={trash} onClick={deleteTask}/>
                 </div>
             </div>
             <KanbanTaskFullModal show={showFull} setShow={setShowFull} task={task} setLoading={setLoading}/>
