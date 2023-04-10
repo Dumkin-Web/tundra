@@ -24,7 +24,7 @@ const Header = () => {
                 <Nav className="me-auto">
                     <Link to={PROJECT_LIST_ROUTE} className="href tc-dark-green tc-dark-green-h fs-m fw-m me-auto">Projects</Link>
                     <Link to={MY_TASKS_ROUTE} className="href tc-dark-green tc-dark-green-h fs-m fw-m ms-3">Calendar</Link>
-                    <Link to={DIALOGS_ROUTE} className="href tc-dark-green tc-dark-green-h fs-m fw-m ms-3">Dialogs</Link>
+                    {/* <Link to={DIALOGS_ROUTE} className="href tc-dark-green tc-dark-green-h fs-m fw-m ms-3">Dialogs</Link> */}
                 </Nav>
                 {!isAuth && <Button onClick={navigateLogin} style={{border: "none"}} className="bg-green bg-green-h tc-dark">Sign In</Button>}
                 {isAuth && <HandySvg src={userIcon} className='headerUserIcon' onClick={() => navigate(USER_ROUTE)} />}

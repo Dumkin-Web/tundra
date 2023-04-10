@@ -7,6 +7,8 @@ const kanbanContrller = require('./kanbanController')
 const { createChat } = require('./messengerController')
 const { Message } = require('../models/models')
 const { Chat } = require('../models/models')
+const { v4: uuidv4 } = require('uuid');
+const scrumController = require('./scrumController')
 
 const generateJWT = (email, fullName, id) => {
     return jwt.sign({email, fullName, id}, process.env.JWT_SECRET_KEY, {expiresIn: "24h"})
@@ -26,7 +28,7 @@ class ProjectController {
                 return res.status(500).json({message: "Invailid project type"})
             }
 
-            const project = await Project.create({name, projectTypeId: projectTypeId.id, ownerId: user.id})
+            const project = await Project.create({name, projectTypeId: projectTypeId.id, ownerId: user.id, botToken: uuidv4()})
             const userProject = await UserProjects.create({userId: user.id, projectId: project.id})
             const chat = await createChat({projectId: project.id})
 
@@ -37,6 +39,8 @@ class ProjectController {
                 case 1:
                     await kanbanContrller.createKanban(req, res, next)
                     break;
+                case 2:
+                    await scrumController.createScrum(req, res, next)
                 default:
                     res.status(501).json({message: "Not Implemented"})
                     break;

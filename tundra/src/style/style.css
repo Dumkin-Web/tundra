@@ -165,3 +165,8 @@ body{
 .leaveIconUniqe:hover{
     fill: #272727;
 }
+
+.tgButton{
+    margin-top: 20px;
+    width: 100%;
+}

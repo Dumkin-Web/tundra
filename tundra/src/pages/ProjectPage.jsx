@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import KanbanProject from "../components/Kanban/KanbanProject";
 import Chat from "../components/Chat/Chat";
-import { setProjectAction } from "../store/projectReducers";
+import { resetProjectAction, setProjectAction } from "../store/projectReducers";
 import { getProjectQuery, getProjectTypes } from "../http/projectApi";
+import Scrum from "../components/Scrum/Scrum";
 
 const ProjectPage = () => {
 
@@ -32,6 +33,10 @@ const ProjectPage = () => {
     else{
       setParentLoading(false)
     }
+
+    return () => {
+      dispatch(resetProjectAction())
+    }
     
   }, [])
 
@@ -44,6 +49,13 @@ const ProjectPage = () => {
                 <KanbanProject parentLoading={parentLoading}/>
               </>
     }
+
+    if(project.projectType === "Scrum"){
+      return  <>
+                <Scrum parentLoading={parentLoading}/>
+              </>
+    }
+
     return (
       <div>
         Hi

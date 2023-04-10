@@ -20,14 +20,14 @@ const KanbanProjectSettingsModal = ({show, setShow, setLoading}) => {
     return (
         <Modal show={show} onHide={() => setShow(false)}> 
             <Modal.Header closeButton>
-                <Modal.Title>Project {project.name} settings</Modal.Title>
+                <Modal.Title style={{fontWeight: "400"}}>Project <span style={{fontWeight: "600"}}>{project.name}'s</span> settings</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
             <h5>Project members:</h5>
             <ListGroup>
                 {project.executors.map(({id, fullName, email}) => {
-                    return  <ListGroup.Item className="d-flex justify-content-between align-items-center">
+                    return  <ListGroup.Item key={id} className="d-flex justify-content-between align-items-center">
                                 <div className="d-flex align-items-center">
                                     <h5 className="fs-s fw-m m-0 me-2">{email}</h5>
                                     <h5 className="fs-s fw-r m-0">{fullName}</h5>
@@ -35,6 +35,14 @@ const KanbanProjectSettingsModal = ({show, setShow, setLoading}) => {
                                 {project.ownerId != id && <HandySvg src={leaveIcon} className='leaveIconUniqe' onClick={() => deleteUser(id)} />}
                             </ListGroup.Item>
                 })}
+            </ListGroup>
+            <h5 className="mt-3">Project bot token for integration:</h5>
+            <ListGroup>
+                    <ListGroup.Item className="d-flex justify-content-between align-items-center">
+                        <div className="d-flex align-items-center">
+                            <h5 className="fs-s fw-m m-0 me-2">{project.botToken}</h5>
+                        </div>
+                    </ListGroup.Item>
             </ListGroup>
             </Modal.Body>
 

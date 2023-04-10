@@ -18,9 +18,9 @@ const ProjectSearch = (projectList, searchString) => {
 
     }
     else{
-        const tmpSearch = String(searchString).replace('#', '')
+        const tmpSearch = String(searchString).replace('#', '').toLocaleLowerCase()
         projectList.forEach((project) => {
-            if(project.project_type.name.includes(tmpSearch)){
+            if(project.project_type.name.toLocaleLowerCase().includes(tmpSearch)){
                 resultList.push(project)
             }
         })

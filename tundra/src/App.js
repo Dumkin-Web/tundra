@@ -1,4 +1,4 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import AppRouter from './routing/AppRouter'
 import Footer from "./components/Footer";
@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import { setAuthAction } from "./store/userReducers";
 
 function App() {
-
+  
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(true)
 
@@ -23,6 +23,7 @@ function App() {
       })
       .catch(e => {
         localStorage.clear()
+        window.location.reload();
       })
     }
     else{

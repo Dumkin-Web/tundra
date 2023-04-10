@@ -24,17 +24,12 @@ const KanbanTask = ({task, onDragOver, onDragLeave, onDragStart, onDragEnd, onDr
         const deadlineDate = new Date(deadline)
         const currentDate = new Date(Date.now())
         const offset = deadlineDate.getTimezoneOffset() * -60 * 1000
-        console.log(offset);
-        console.log(deadlineDate - currentDate);
         const estimatedTime = new Date(deadlineDate - currentDate - offset)
 
-        console.log(estimatedTime);
         const eMonth = estimatedTime.getMonth()
         const eDay = estimatedTime.getDate() - 1
         const eHours = estimatedTime.getHours()
         const eMinutes = estimatedTime.getMinutes()
-
-        console.log(eHours);
 
         if(deadlineDate - currentDate)
         return `${eMonth}m ${eDay}d ${eHours}h ${eMinutes}m`
@@ -101,7 +96,7 @@ const KanbanTask = ({task, onDragOver, onDragLeave, onDragStart, onDragEnd, onDr
 
         const month = odd.getMonth();
         const days = odd.getDate() - 1;
-        const hours = odd.getHours() - offset;
+        const hours = odd.getHours();
         const minutes = odd.getMinutes();
         const seconds = odd.getSeconds();
 

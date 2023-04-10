@@ -29,8 +29,10 @@ const Chat = ({connect, projectId, loading, setLoading}) => {
     const sideNotification = useRef()
     const myNotification = useRef()
 
-    const [socket, setSocket] = useState(io(process.env.REACT_APP_SERVER_URL, {
-      autoConnect: false
+    const [socket, setSocket] = useState(io(process.env.REACT_APP_SERVER_URL_WS, {
+      autoConnect: false,
+      path: '/server/socket.io',
+      transports: ['websocket']
     }))
 
     const initWebSocket = () => {
@@ -64,9 +66,11 @@ const Chat = ({connect, projectId, loading, setLoading}) => {
 
       socket.on('private_message', (message) => {
         if(message.senderId != userId){
+          sideNotification.current.muted = false
           sideNotification.current.play()
         }
         else{
+          sideNotification.current.muted = false
           myNotification.current.play()
         }
         setMessages(messages => [...messages, message])
@@ -101,7 +105,7 @@ const Chat = ({connect, projectId, loading, setLoading}) => {
     }, [])
 
     useEffect(() => {
-
+      console.log('emit update');
       if(loading){
         socket.emit('projectUpdate')
       }

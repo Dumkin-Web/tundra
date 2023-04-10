@@ -7,6 +7,8 @@ const { Server } = require("socket.io");
 
 const router = require('./routes/index')
 const errorHandler = require('./middleware/ErrorHandlingMiddleware')
+const tgBot = require('./tgBot')
+
 
 const PORT = process.env.PORT || 3001;
 
@@ -15,6 +17,7 @@ const app = express()
 const server = require('http').createServer(app);
 const io = require('./ws/wsController')(server)
 
+const bot = new tgBot()
 
 //console.log(io);
 
@@ -44,7 +47,7 @@ const projectTypesInit = async () => {
         if(newType.count === 0){
             newType = await models.ProjectType.create({name: "Kanban"})
             newType = await models.ProjectType.create({name: "Scrum"})
-            newType = await models.ProjectType.create({name: "Scrumban"})
+            //newType = await models.ProjectType.create({name: "Scrumban"})
         }
     }
     catch(e){

@@ -3,6 +3,8 @@ const ApiError = require('../errors/ApiError')
 const { where } = require('sequelize')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const tgBot = require('../tgBot/index')
+const { Format } = require('telegraf')
 
 class KanbanController{
 
@@ -28,13 +30,14 @@ class KanbanController{
         const {kanbanColumnId, name, description, order, deadline, executorId, inWork} = req.body
         try{
             const newTask = await KanbanTask.create({kanbanColumnId, name, description, order, deadline, executorId: executorId ?? -1, inWork })
+
+            const botMessage = `New task ${newTask.name} has been created! \n\nYou can view the changes by following the link: \nhttps://tundra-workspace.ru/project/${req.projectId}`     
+            tgBot.sendNotification(req.projectId, botMessage)
         }
         catch(e){
             console.log(e);
             return next(e)
         }
-
-        
 
         return res.status(201).json({message: "Task created"})
     }
@@ -50,7 +53,10 @@ class KanbanController{
                     task[key] = newTaskData[key]
                 }
             })
-            //console.log(task);
+
+            const botMessage = `Task ${task.name} has been updated! \n\nYou can view the changes by following the link: \nhttps://tundra-workspace.ru/project/${req.projectId}`        
+            tgBot.sendNotification(req.projectId, botMessage)
+
             task.save()
         }
         catch(e){
@@ -91,6 +97,9 @@ class KanbanController{
             const todoColumn = await KanbanColumn.create({name: "TODO", color: "#ff6d3b", kanbanBoardId: newBoard.id, order: 0})
             const inWorkColumn = await KanbanColumn.create({name: "IN WORK", color: "#fff72b", kanbanBoardId: newBoard.id, order: 1})
             const doneColumn = await KanbanColumn.create({name: "DONE", color: "#5fff2b", kanbanBoardId: newBoard.id, order: 2})
+
+            const botMessage = `New board ${newBoard.name} has been created! \n\nYou can view the changes by following the link: \nhttps://tundra-workspace.ru/project/${req.projectId}`        
+            tgBot.sendNotification(req.projectId, botMessage)
 
             return res.status(201).json({message: "Board created"})
         }

@@ -1,14 +1,45 @@
-import React from "react"
+import React, { useEffect } from "react"
 import style from '../style/Main.module.css'
 
 import '../style/mainPage.scss'
 import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { SIGN_UP_ROUTE } from "../routing/consts";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { PROJECT_LIST_ROUTE, SIGN_UP_ROUTE } from "../routing/consts";
+import { userLogin, userRegistration } from "../http/userApi";
+import { setAuthAction } from "../store/userReducers";
+import { useDispatch } from "react-redux";
 
 const Main = () => {
 
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // useEffect(() => {
+  //   const id = searchParams.get('id')
+  //   const firstName = searchParams.get('first_name')
+  //   const lastName = searchParams.get('last_name')
+  //   const username = searchParams.get('username')
+  //   console.log(id);
+  //   const requestData = {
+  //     email: '@' + username,
+  //     password: id,
+  //     fullName: lastName + ' ' + firstName
+  //   }
+
+  //   if(id){
+  //     userLogin(requestData).then(data => {
+
+  //       dispatch(setAuthAction(data))
+  //       navigate(PROJECT_LIST_ROUTE)
+  //     }).catch(() => {
+  //       userRegistration(requestData).then(data => {
+  //         dispatch(setAuthAction(data)) 
+  //         navigate(PROJECT_LIST_ROUTE)
+  //       })
+  //     })
+  //   }
+  // })
 
   return (
     <main style={{height: "auto"}} className="mainPage">

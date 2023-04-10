@@ -47,27 +47,28 @@ const KanbanTaskFullModal = ({show, setShow, task, setLoading}) => {
 
         (new FormData(e.target)).forEach((value, key) => {
             console.log(key);
+            console.log(value);
             if(key == 'deadline' && deadline != value){
-                if(value === ''){
-                    requestData[key] = null;
-                }
-                else{
-                    requestData[key] = value;
-                }
-            }
-            else if(key.toString() != 'deadline' && task[key] != value){
-                requestData[key] = value;
-            }
 
-            if(key == 'inWork' && deadline != value){
-                if(value === ''){
-                    requestData[key] = null;
+                if(value == ''){
+                    delete requestData[key];
                 }
                 else{
                     requestData[key] = value;
                 }
+
             }
-            else if(key.toString() != 'inWork' && task[key] != value){
+            else if(key == 'inWork' && inWork != value){
+
+                if(value == ''){
+                    delete requestData[key];
+                }
+                else{
+                    requestData[key] = value;
+                }
+
+            }
+            else if(key.toString() != 'deadline' && key.toString() != 'inWork' && task[key] != value){
                 requestData[key] = value;
             }
         })

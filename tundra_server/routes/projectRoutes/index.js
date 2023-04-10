@@ -2,6 +2,7 @@ const Router = require('express')
 const router = new Router()
 
 const kanbanRouter = require('./kanbanRouter')
+const scrumRouter = require('./scrumRouter')
 const projectMiddleware = require('../../middleware/projectMiddleware')
 const projectTypeMiddlewear = require('../../middleware/projectTypeMiddleware')
 const projectController = require('../../controllers/projectController')
@@ -27,5 +28,6 @@ router.post('/:projectId/leaveFromProject', projectController.leaveFromProject)
 
 //Написать настройку проекта и сделать мидлвеар для проверки овнера
 router.use('/:projectId/kanban', projectMiddleware, projectTypeMiddlewear("Kanban"), kanbanRouter)
+router.use('/:projectId/scrum', projectMiddleware, projectTypeMiddlewear("Scrum"), scrumRouter)
 
 module.exports = router

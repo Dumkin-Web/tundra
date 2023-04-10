@@ -62,11 +62,11 @@ const KanbanBoard = ({id, index, setLoading, currentColumn, setCurrentColumn, cu
         catch(e){
 
         }
-        console.log(column.id);
-        console.log(currentTask.id);
 
         const response = await updateKanbanTask({kanbanColumnId: column.id}, board.projectId, currentTask.id)
+        console.log(response);
         setLoading(true)
+        
     }
 
     const changeBoardName = async () => {

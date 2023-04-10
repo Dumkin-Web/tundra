@@ -62,29 +62,29 @@ const UserPage = () => {
                     <Form onSubmit={changeUserInfo}>
 
                         <Form.Group>
-                            <Form.Label className="fs-m tc-dark mt-4">Email</Form.Label>
+                            <Form.Label className="fs-m tc-dark mt-4">{user.email[0].includes('@') ? 'Telegram' : 'Email'}</Form.Label>
                             <Form.Control type="text" name="email" placeholder="mail@example.com" autoComplete="email login" defaultValue={user.email} disabled/>
                         </Form.Group>
 
                         <Form.Group>
                             <Form.Label className="fs-m tc-dark mt-4">Name&Surname</Form.Label>
-                            <Form.Control type="text" name="fullName" placeholder="Name and surname" autoComplete="off" defaultValue={user.fullName} readOnly={!edit} required minLength={3} />
+                            <Form.Control type="text" name="fullName" placeholder="Name and surname" autoComplete="off" defaultValue={user.fullName} readOnly={!edit} disabled={user.email[0].includes('@')} required minLength={3} />
                         </Form.Group>
 
-                        <Form.Group>
+                        {!user.email[0].includes('@') && <Form.Group>
                             <Form.Label className="fs-m tc-dark mt-4">Password</Form.Label>
                             <Form.Control ref={passwordInput} type="password" name="password" autoComplete="off" placeholder="Password" readOnly={!edit}/>
-                        </Form.Group>
+                        </Form.Group>}
 
-                        <Form.Group>
+                        {!user.email[0].includes('@') && <Form.Group>
                             <Form.Label className="fs-m tc-dark mt-4">Password repeat</Form.Label>
                             <Form.Control ref={passwordInputR} type="password" name="passwordRepeat" autoComplete="off" placeholder="Repeat password" readOnly={!edit}/>
-                        </Form.Group>
+                        </Form.Group>}
                         
                         <div className="buttonsContainer mt-4">
                             <Button variant="danger" onClick={logOut}>Logout</Button>
-                            {!edit && <Button onClick={() => setEdit(true)}>Edit</Button>}
-                            {edit &&<div>
+                            {!user.email[0].includes('@') && !edit && <Button onClick={() => setEdit(true)}>Edit</Button>}
+                            {!user.email[0].includes('@') && edit &&<div>
                                 <Button variant="secondary" className="me-2" onClick={() => setEdit(false)}>Cancel</Button>
                                 <Button variant="success" type="submit">Save</Button>
                             </div>}

@@ -37,8 +37,8 @@ const InviteUserModal = ({show, setShow, setLoading}) => {
                 <Form onSubmit={inviteUser}>
                     <Modal.Body>
                         <Form.Group>
-                            <Form.Label className="fs-m tc-dark">User email</Form.Label>
-                            <Form.Control ref={emailInput} type="text" name="email" autoComplete="off" placeholder="useremail@example.com"/>
+                            <Form.Label className="fs-m tc-dark">User email or Telegram username</Form.Label>
+                            <Form.Control ref={emailInput} type="text" name="email" autoComplete="off" placeholder="useremail@example.com | @telegram_user"/>
                         </Form.Group>
                         <Form.Text className="text-danger" ref={formAlert}>
                             

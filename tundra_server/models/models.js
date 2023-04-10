@@ -20,6 +20,8 @@ const Project = sequelize.define('project', {
     name: {type: DataTypes.STRING},
     creation_date: {type: DataTypes.DATE},
     ownerId: {type: DataTypes.INTEGER},
+    botToken: {type: DataTypes.STRING},
+    tgChatId: {type: DataTypes.STRING, allowNull: true}
 })
 
 const ProjectType = sequelize.define('project_type', {
@@ -67,6 +69,24 @@ const Message = sequelize.define('message', {
     senderId: {type: DataTypes.INTEGER},
 })
 
+//SCRAM
+
+const Scrum = sequelize.define('scrum', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING},
+    scrumId: {type: DataTypes.INTEGER, allowNull: true},
+    sprintStart: {type: DataTypes.DATE, allowNull: true},
+    sprintEnd: {type: DataTypes.DATE, allowNull: true}
+})
+
+const ScrumTask = sequelize.define('scrum_task', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING},
+    description: {type: DataTypes.TEXT, defaultValue: ""},
+    done: {type: DataTypes.BOOLEAN, defaultValue: false},
+    storyPoints: {type: DataTypes.INTEGER, defaultValue: 0}
+})
+
 //PRIVATE DIALOG //NEW!!!
 
 const UserDialogs = sequelize.define('user_dialogs', {
@@ -98,6 +118,12 @@ Message.belongsTo(Chat)
 Project.hasMany(KanbanBoard, {onDelete: 'cascade'})
 KanbanBoard.belongsTo(Project)
 
+Project.hasOne(Scrum, {onDelete: 'cascade'})
+Scrum.belongsTo(Project)
+
+Scrum.hasMany(ScrumTask, {onDelete: 'cascade'})
+ScrumTask.belongsTo(Scrum)
+
 KanbanBoard.hasMany(KanbanColumn, {onDelete: 'cascade'})
 KanbanColumn.belongsTo(KanbanBoard)
 
@@ -127,5 +153,7 @@ module.exports = {
     Message,
     UserDialogs,
     Dialog,
-    DialogMessage
+    DialogMessage,
+    Scrum,
+    ScrumTask
 }

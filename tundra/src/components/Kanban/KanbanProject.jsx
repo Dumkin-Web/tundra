@@ -10,13 +10,18 @@ import InviteUserModal from "../InviteUserModal";
 import { createKanbanBoard } from "../../http/kanbanApi";
 import GantModal from "../Gant/GantModal";
 import KanbanProjectSettingsModal from "./KanbanProjectSettingsModal";
+import { setProjectLoading } from "../../store/projectLoadingReducer";
 
 const KanbanProject = ({parentLoading}) => {
+    const dispatch = useDispatch()
 
     const [id, name, projectType, boards, ownerId] = useSelector(state => [state.project.id, state.project.name, state.project.projectType, state.project.kanban_boards || [], state.project.ownerId])
     const userId = useSelector(state => state.user.id)
 
-    const [loading, setLoading] = useState(true)
+    //const [loading, setLoading] = useState(true)
+    const loading = useSelector(state => state.projectLoading.loading)
+    const setLoading = (arg) => dispatch(setProjectLoading(arg))
+
     const [loadingExe, setLoadingExe] = useState(true)
     const [showInvite, setShowInvite] = useState(false)
     const [showGant, setShowGant] = useState(false)
@@ -25,9 +30,8 @@ const KanbanProject = ({parentLoading}) => {
     const [currentColumn, setCurrentColumn] = useState(null)
     const [currentTask, setCurrentTask] = useState(null)
 
-    const dispatch = useDispatch()
-
     useEffect(() => {
+        console.log('loading');
         getProject({id, projectType}).then(res => {
             dispatch(setProjectAction(res))
             getProjectMembers({projectId: id}).then(members => {
@@ -35,6 +39,7 @@ const KanbanProject = ({parentLoading}) => {
             })
             setLoading(false)
         })
+
     }, [loading, parentLoading])
 
     useEffect(() => {
@@ -70,6 +75,11 @@ const KanbanProject = ({parentLoading}) => {
         return tempTasks
     }
 
+    const sortBoardsById = (boardList) => {
+        const temp = boardList.sort((a, b) => a.id - b.id)
+        return temp
+    }
+
     if(loadingExe){
         return <div></div>
     }
@@ -85,7 +95,7 @@ const KanbanProject = ({parentLoading}) => {
                         {userId == ownerId && <Button onClick={() => setShowSettings(true)}>Settings</Button>}
                     </div>
                 </div>
-                {boards.map(({id, name}, index) => {
+                {sortBoardsById(boards).map(({id, name}, index) => {
                     return <KanbanBoard key={id} id={id} index={index} setLoading={setLoading} currentColumn={currentColumn} setCurrentColumn={setCurrentColumn} currentTask={currentTask} setCurrentTask={setCurrentTask} />
                 })}
                 <Button className="mt-2" onClick={createNewBoard}>+ Board</Button>

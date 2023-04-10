@@ -1,10 +1,11 @@
 import React from "react"
 import { Button, Form } from "react-bootstrap";
-import { userRegistration } from "../http/userApi";
+import { userLogin, userRegistration } from "../http/userApi";
 import { useDispatch } from "react-redux";
 import { setAuthAction } from "../store/userReducers";
 import { Link, useNavigate } from "react-router-dom";
 import { PROJECT_LIST_ROUTE, SIGN_IN_ROUTE, SIGN_UP_ROUTE } from "../routing/consts";
+import TelegramLoginButton from "telegram-login-button";
 
 const SignUp = () => {
 
@@ -44,6 +45,29 @@ const SignUp = () => {
 
   }
 
+  const loginTg = ({id, first_name, last_name, username}) => {
+
+    const requestData = {
+        email: '@' + username,
+        password: `${id}`,
+        fullName: last_name + ' ' + first_name
+    }
+
+    if(id){
+        userLogin(requestData).then(data => {
+  
+          dispatch(setAuthAction(data))
+          navigate(PROJECT_LIST_ROUTE)
+        }).catch(() => {
+          userRegistration(requestData).then(data => {
+            dispatch(setAuthAction(data)) 
+            navigate(PROJECT_LIST_ROUTE)
+          })
+        })
+    }
+
+}
+
   return (
       <Form onSubmit={registration} className="bg-dark-green p-4 rounded" style={{width: "400px"}}>
         <h1 style={{textAlign: "center"}} className="tc-white fs-xl">Sign In</h1>
@@ -73,6 +97,7 @@ const SignUp = () => {
           <Link to={SIGN_IN_ROUTE} className="href tc-white tc-white-h fs-s fw-r">Already have an account?</Link>
           <Button style={{border: "none"}} variant="dark" type="submit">Sign Up</Button>
         </div>
+        <TelegramLoginButton botName="TundraWorkspaceBot" dataOnauth={(user) => loginTg(user)} className='tgButton' cornerRadius='10' />
     </Form>
     )
 };
